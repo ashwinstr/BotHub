@@ -45,4 +45,4 @@ async def amireallyalive(on):
                      f"Website: https://www.facebook.com/Teknoways \n"
                      " \n"
                      f"Userbot: testuserbot \n"
-                     "`i will never die`")    
+                     "`i can't die`")    

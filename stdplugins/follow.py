@@ -28,7 +28,7 @@ DEFAULTUSER = Config.ALIVE_NAME if Config.ALIVE_NAME else uname().node
 async def follow(follow):
     """ For .follow command, check if the bot is running.  """
     await follow.edit(
-                     f"`FOLLOW {DEFAULTUSER} ON` \n\n"
+                     f"`FOLLOW ASHWIN ON` \n\n"
                      f"[InstaGram](https://instagram.com/shutterbugash?igshid=v0ykrmpxvma0) \n\n"
                      )    
 

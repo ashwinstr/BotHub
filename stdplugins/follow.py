@@ -29,6 +29,6 @@ async def follow(follow):
     """ For .follow command, check if the bot is running.  """
     await follow.edit(
                      f"`FOLLOW ASHWIN ON` \n\n"
-                     f" https://instagram.com/shutterbugash?igshid=v0ykrmpxvma0) \n\n"
+                     f" https://instagram.com/shutterbugash?igshid=v0ykrmpxvma0 \n\n"
                      )    
 

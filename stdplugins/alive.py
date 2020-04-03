@@ -31,11 +31,11 @@ DEFAULTUSER = Config.ALIVE_NAME if Config.ALIVE_NAME else uname().node
 async def amireallyalive(on):
     """ For .on command, check if the bot is running.  """
     await on.edit(
-                     " Hey `I am ON Ashwin.`\n"
+                     " 🤖Hey `I am ON Ashwin.`🤖\n"
                      " \n"
-                     f"Telethon version: {version.__version__} \n"
-                     f"Python: {python_version()} \n"
+                     f"📱Telethon version: {version.__version__} \n"
+                     f"🐍Python: {python_version()} \n"
                      f"------------------------------------ \n"
-                     f"User: {DEFAULTUSER} \n"
+                     f"👦🏻User: {DEFAULTUSER} \n"
                      " \n"
                      "`I will never die.`")    

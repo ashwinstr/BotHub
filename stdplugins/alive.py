@@ -38,4 +38,4 @@ async def amireallyalive(on):
                      f"------------------------------------ \n"
                      f"👦🏻User: {DEFAULTUSER} \n"
                      " \n"
-                     "`I will never die.`")    
+                     "🤖`I will never die.`🤖")    

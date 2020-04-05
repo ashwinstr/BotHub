@@ -1,8 +1,9 @@
 """.gban , .ungban"""
 
 from asyncio import sleep
+import requests
 from os import remove
-from telethon import events
+from telethon import events, errors, functions, types
 from telethon.tl import functions, types
 from platform import python_version, uname
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,
@@ -30,6 +31,8 @@ from telethon.tl import functions, types
 from uniborg.util import admin_cmd
 from platform import python_version, uname
 from sample_config import Config
+import io
+import re
 
 
 # ================= CONSTANT =================
@@ -152,48 +155,9 @@ async def gban(gbon):
     
     
     ####
-    @borg.on(admin_cmd(pattern="^.users ?(.*)", allow_sudo=True))
-    async def get_users(show):
- #   """ For .users command, list all of the users in a chat. """
-    info = await show.client.get_entity(show.chat_id)
-    title = info.title if info.title else "this chat"
-    mentions = 'Users in {}: \n'.format(title)
-    try:
-        if not show.pattern_match.group(1):
-            async for user in show.client.iter_participants(show.chat_id):
-                if not user.deleted:
-                    mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
-                else:
-                    mentions += f"\nDeleted Account `{user.id}`"
-        else:
-            searchq = show.pattern_match.group(1)
-            async for user in show.client.iter_participants(
-                    show.chat_id, search=f'{searchq}'):
-                if not user.deleted:
-                    mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
-                else:
-                    mentions += f"\nDeleted Account `{user.id}`"
-    except ChatAdminRequiredError as err:
-        mentions += " " + str(err) + "\n"
-    try:
-        await show.edit(mentions)
-    except MessageTooLongError:
-        await show.edit(
-            "Damn, this is a huge group. Uploading users lists as file.")
-        file = open("userslist.txt", "w+")
-        file.write(mentions)
-        file.close()
-        await show.client.send_file(
-            show.chat_id,
-            "userslist.txt",
-            caption='Users in {}'.format(title),
-            reply_to=show.id,
-        )
-        remove("userslist.txt")
-
-
+  
 async def get_user_from_event(event):
- #   """ Get the user from argument or replied message. """
+    """ Get the user from argument or replied message. """
     args = event.pattern_match.group(1).split(' ', 1)
     extra = None
     if event.reply_to_msg_id and not len(args) == 2:
@@ -240,3 +204,35 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+
+
+@borg.on(events.NewMessage())     
+async def muter(moot):
+    """ Used for deleting the messages of muted people """
+    try:
+        from sql_helpers.spam_mute_sql import is_muted
+        from sql_helpers.gmute_sql import is_gmuted
+    except AttributeError:
+        return
+    muted = is_muted(moot.chat_id)
+    gmuted = is_gmuted(moot.sender_id)
+    rights = ChatBannedRights(
+        until_date=None,
+        send_messages=True,
+        send_media=True,
+        send_stickers=True,
+        send_gifs=True,
+        send_games=True,
+        send_inline=True,
+        embed_links=True,
+    )
+    if muted:
+        for i in muted:
+            if str(i.sender) == str(moot.sender_id):
+                await moot.delete()
+                await moot.client(
+                    EditBannedRequest(moot.chat_id, moot.sender_id, rights))
+    for i in gmuted:
+        if i.sender == str(moot.sender_id):
+            await moot.delete()
+

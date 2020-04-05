@@ -190,14 +190,14 @@ async def on_afkb(event):
         msg = None
 <<<<<<< HEAD
         message_to_reply = f"My master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
-            f"\n\n__and HE may be back soon__\n**Because he is** {reason}" \
+            f"\n\n__and he may be back soon__\n**Because he is** {reason}" \
             if reason \
             else f"My master {DEFAULTUSER} is **afk Since** {total_afkb_time} so wait until he is back.\n\n**THANKS**.  "
 =======
-        message_to_reply = f"My Master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
-            f"\n__and HE may be back soon__\n**Because my King is** {reason}" \
+        message_to_reply = f"My master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
+            f"\n__and he may be back soon__\n**Because my King is** {reason}" \
             if reason \
-            else f"My King 👑 {DEFAULTUSER} 👑 is **afk Since** {total_afkb_time} so wait until He is back.\n**CAUSE** {AFKSK}\n**THANKS**.  "
+            else f"My master {DEFAULTUSER} is **afk Since** {total_afkb_time} so wait until he is back.\n**CAUSE** {AFKSK}\n**THANKS**.  "
 >>>>>>> 2ef244caa7b980211c1adc391a8d4ef52a3fd66b
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)

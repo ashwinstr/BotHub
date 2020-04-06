@@ -82,6 +82,8 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+
 # ================================================
 
 async def get_user_from_event(event):
@@ -132,100 +134,19 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+  
+@borg.on(events.NewMessage(incoming=True))
+async def on_new_message(event):
+#async def muter(moot):
 
-#@borg.on(admin_cmd(pattern="ungban ?(.*)", allow_sudo=True))
-#async def ungban(event):
-@borg.on(events.NewMessage(pattern=r"\.ungban", outgoing=True))
-async def _(event):
-    """ For .ungban command, Globaly ungbans the target in the userbot """
-    # Admin or creator check
-    chat = await event.get_chat()
-    admin = chat.admin_rights
-    creator = chat.creator
-
-    # Well
-    if not admin and not creator:
-        await event.edit(NO_ADMIN)
-        return
-
-    # If everything goes well...
-    await event.edit("`Ungbanning...`")
-
-    user = await get_user_from_event(event)
-    user = user[0]
-    if user:
-        pass
-    else:
-        return
-
+    """ Used for deleting the messages of muted people """
     try:
-        await event.client(
-            EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS))
-        await event.edit("```Ungbanned Successfully```")
-
-        if BOTLOG:
-            await event.client.send_message(
-                BOTLOG_CHATID, "#UNGBAN\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
-    except UserIdInvalidError:
-        await event.edit("`Uh oh my ungban logic broke!`")
-
-
-#@register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
-#async def gban(event):
-@borg.on(events.NewMessage(pattern=r"\.gban", outgoing=True))
-async def _(event):
-
-
-    """ For .gban command, globally bans the replied/tagged person """
-
-    chat = await event.get_chat()
-
-    if event.fwd_from:
-        return
-
-    if event.reply_to_msg_id:
-        reply_message = await event.get_reply_message()
-        replied_user = await event.client(GetFullUserRequest(reply_message.from_id))
-        user = replied_user.user
-        
-
-    result = await borg(functions.channels.GetAdminedPublicChannelsRequest())
-    for channel_obj in result.chats:
-        chat_id = channel_obj.id
-
-    try:
-        await event.client(EditBannedRequest(chat_id, user.id,
-                                           BANNED_RIGHTS))
-    except BadRequestError:
-        await event.edit(NO_PERM)
-        return
-    # Helps ban group join spammers more easily
-    try:
-        reply = await event.get_reply_message()
-        if reply:
-            await reply.delete()
-    except BadRequestError:
-        await event.edit(
-            "`I dont have message nuking rights! But still he was gbanned!`")
-        return
-        await event.edit("done") 
- 
-
-"""
-
-@borg.on(events.NewMessage())     
-async def muter(moot):
- ""Used for deleting the messages of muted people ""
-    
-    try:
-        from sql_helpers.spam_mute_sql import is_muted
-        from sql_helpers.gmute_sql import is_gmuted
+        from sql_helpers.locks_sql import init_locks
+        from sql_helpers.global_bans_sql import gban_user
     except AttributeError:
         return
-    muted = is_muted(moot.chat_id)
-    gmuted = is_gmuted(moot.sender_id)
+    locked = init_locks(event.chat_id, reset=False)
+    gbaned = gban_user(event.sender_id, name, reason=None)
     rights = ChatBannedRights(
         until_date=None,
         send_messages=True,
@@ -236,14 +157,103 @@ async def muter(moot):
         send_inline=True,
         embed_links=True,
     )
-    if muted:
-        for i in muted:
-            if str(i.sender) == str(moot.sender_id):
-                await moot.delete()
-                await moot.client(
-                    EditBannedRequest(moot.chat_id, moot.sender_id, rights))
-    for i in gmuted:
-        if i.sender == str(moot.sender_id):
-            await moot.delete()
+    if locked:
+        for i in locked:
+            if str(i.sender) == str(event.sender_id):
+                await event.delete()
+                await event.client(
+                    EditBannedRequest(event.chat_id, event.sender_id, rights))
+    for i in gbaned:
+        if i.sender == str(event.sender_id):
+            await event.ban()
 
-"""
+
+#@register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
+#async def ungmoot(un_gmute):
+@borg.on(events.NewMessage(pattern=r"\.ungban", outgoing=True))
+async def _(event):
+    """ For .ungban command, ungbans the target in the userbot """
+    # Admin or creator check
+    chat = await event.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await event.edit(NO_ADMIN)
+        return
+
+    # Check if the function running under SQL mode
+    try:
+        from sql_helpers.global_bans_sql import ungban_user
+    except AttributeError:
+        await event.edit(NO_SQL)
+        return
+
+    user = await get_user_from_event(event)
+    user = user[0]
+    if user:
+        pass
+    else:
+        return
+
+    # If pass, inform and start ungmuting
+    await event.edit('```Ungmuting...```')
+
+    if ungban(user.id) is False:
+        await event.edit("`Error! User probably not gbaned.`")
+    else:
+        # Inform about success
+        await event.edit("```Ungbaned Successfully```")
+
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID, "#UNGBAN\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {event.chat.title}(`{event.chat_id}`)")
+
+
+#@register(outgoing=True, pattern="^.gmute(?: |$)(.*)")
+#async def gspider(gspdr):
+@borg.on(events.NewMessage(pattern=r"\.gban", outgoing=True))
+async def _(event):
+    """ For .gban command, globally mutes the replied/tagged person """
+    # Admin or creator check
+    chat = await event.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+
+    # If not admin and not creator, return
+    if not admin and not creator:
+        await event.edit(NO_ADMIN)
+        return
+
+    # Check if the function running under SQL mode
+    try:
+        from sql_helpers.global_bans_sq import gban_user
+    except AttributeError:
+        await event.edit(NO_SQL)
+        return
+
+    user, reason = await get_user_from_event(event)
+    if user:
+        pass
+    else:
+        return
+
+    # If pass, inform and start gmuting
+    await event.edit("`Grabs a huge, sticky duct tape!`")
+    if gban(user.id) is False:
+        await event.edit(
+            '`Error! User probably already gbaned.\nRe-rolls the tape.`')
+    else:
+        if reason:
+            await event.edit(f"`Globally taped!`Reason: {reason}")
+        else:
+            await event.edit("`Globally taped!`")
+
+        if BOTLOG:
+            await event.client.send_message(
+                BOTLOG_CHATID, "#GBAN\n"
+                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                f"CHAT: {event.chat.title}(`{event.chat_id}`)")

@@ -113,7 +113,7 @@ async def set_not_afkb(event):
     global afkb_end
     back_alive = datetime.now()
     afkb_end = back_alive.replace(microsecond=0)
-    total_afkb_time = str(afkb_end - afkb_start)
+    total_afkb_time += str(afkb_end - afkb_start)
     current_message = event.message.message
     if ".afkb" not in current_message and "yes" in USER_AFKB:  # pylint:disable=E0602
         shite = await borg.send_message(event.chat_id, "__My Master is Back!__\n**He is No Longer afk.**\n `Was afk for:``" + total_afkb_time + "`")
@@ -151,7 +151,7 @@ async def on_afkb(event):
     global afkb_end
     back_alivee = datetime.now()
     afkb_end = back_alivee.replace(microsecond=0)
-    total_afkb_time = str(afkb_end - afkb_start)
+    total_afkb_time += str(afkb_end - afkb_start)
     afkb_since = "**a while ago**"
     current_message_text = event.message.message.lower()
     if "afkb" in current_message_text:
@@ -191,7 +191,11 @@ async def on_afkb(event):
         message_to_reply = f"My master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
             f"\n__and he may be back soon__\n**Because my master is** {reason}" \
             if reason \
+<<<<<<< HEAD
             else f"My master {DEFAULTUSER} is **afk Since** {total_afkb_time} so wait until he is back.\n**CAUSE** {AFKSK}\n**THANKS**.  "
+=======
+            else f"My King 👑 {DEFAULTUSER} 👑 is **afk Since** {total_afkb_time}.\n {AFKSK}\n**THANKS FOR UNDERSTANDING**.  "
+>>>>>>> 8b3030dc9174004b2345a2930ec2ca019a299813
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afkb_message:  # pylint:disable=E0602

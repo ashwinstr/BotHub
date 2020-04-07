@@ -188,10 +188,10 @@ async def on_afkb(event):
             else:
                 afkb_since = f"`{int(seconds)}s` **ago**"
         msg = None
-        message_to_reply = f"My Master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
-            f"\n__and HE may be back soon__\n**Because my King is** {reason}" \
+        message_to_reply = f"My master {DEFAULTUSER} Is **afk since** {total_afkb_time}" + \
+            f"\n__and he may be back soon__\n**Because my master is** {reason}" \
             if reason \
-            else f"My King 👑 {DEFAULTUSER} 👑 is **afk Since** {total_afkb_time}. \nand My King has left a word for you only: \n{AFKSK}\n`.` "
+            else f"My master {DEFAULTUSER} is **afk Since** {total_afkb_time} so wait until he is back.\n**CAUSE** {AFKSK}\n**THANKS**.  "
         msg = await event.reply(message_to_reply)
         await asyncio.sleep(5)
         if event.chat_id in last_afkb_message:  # pylint:disable=E0602

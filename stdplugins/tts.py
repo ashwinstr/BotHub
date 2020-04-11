@@ -11,7 +11,7 @@ from gtts import gTTS
 from uniborg.util import admin_cmd
 
 
-@borg.on(admin_cmd(pattern="tts (.*)"))
+@borg.on(admin_cmd("tts (.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -32,7 +32,8 @@ async def _(event):
         os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
     required_file_name = Config.TMP_DOWNLOAD_DIRECTORY + "voice.ogg"
     try:
-        tts = gTTS(text, lan)
+        #https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
+        tts = gTTS(text, lang=lan)
         tts.save(required_file_name)
         command_to_execute = [
             "ffmpeg",
@@ -72,4 +73,3 @@ async def _(event):
         await event.delete()
     except Exception as e:
         await event.edit(str(e))
-        

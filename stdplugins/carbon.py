@@ -1,8 +1,10 @@
-"""Carbon Scraper Plugin for Userbot. //text in creative way.
+"""
+Carbon Scraper Plugin for Userbot. //text in creative way.
 usage: .carbon //as a reply to any text message
 
-Thanks to @r4v4n4 for vars"""
+Thanks to @NeoMatrix90 for vars
 
+"""
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
@@ -17,7 +19,7 @@ import os
 async def carbon_api(e):
  if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
    """ A Wrapper for carbon.now.sh """
-   await e.edit("⬜⬜⬜⬜⬜")
+   await e.edit("⬜⬜⬜⬜⬜ 00%")
    CARBON = 'https://carbon.now.sh/?l={lang}&code={code}'
    CARBONLANG = "en"
    textx = await e.get_reply_message()
@@ -37,34 +39,34 @@ async def carbon_api(e):
    chrome_options.add_argument('--disable-gpu')
    prefs = {'download.default_directory' : './'}
    chrome_options.add_experimental_option('prefs', prefs)
-   await e.edit("⬛⬛⬜⬜⬜")
+   await e.edit("⬛⬛⬜⬜⬜ 30%")
 
    driver = webdriver.Chrome(executable_path=Config.CHROME_DRIVER, options=chrome_options)
    driver.get(url)
-   download_path = './'
+   download_path = '/root/userbot/.bin'
    driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
    params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
    command_result = driver.execute("send_command", params)
 
    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
    sleep(5) # this might take a bit.
-   driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-   sleep(5)
-   await e.edit("⬛⬛⬛⬜⬜")
-   driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
-   sleep(5) #Waiting for downloading
+   #driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+   #sleep(5)
+   await e.edit("⬛⬛⬛⬜⬜ 50%")
+   #driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+   #sleep(5) #Waiting for downloading
 
-   await e.edit("⬛⬛⬛⬛⬛")
-   file = './carbon.png'
+   await e.edit("⬛⬛⬛⬛⬛ 100%")
+   file = '/root/userbot/.bin/carbon.png'
    await e.edit("✅Carbon Completed, Uploading Carbon✅")
    await e.client.send_file(
          e.chat_id,
          file,
-         caption="Carbon by [@Three_Cube_TeKnoways_Bot](https://www.github.com/mkaraniya/BotHub)",
+         caption="Carbon by [@NeoMatrix90](https://t.me/NeoMatrix90)",
          force_document=True,
          reply_to=e.message.reply_to_msg_id,
          )
 
-   os.remove('./carbon.png')
+   os.remove('/root/userbot/.bin/carbon.png')
    # Removing carbon.png after uploading
    await e.delete() # Deleting msg

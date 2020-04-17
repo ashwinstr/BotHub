@@ -33,6 +33,10 @@ async def amireallyalive(on):
     """ For .on command, check if the bot is running.  """
     await on.edit(
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 427ad55acdfc999f96ca396c67de39b336314eec
                      " 🤖Hey `I am ON Ashwin.`🤖\n"
                      " \n"
                      f"📱Telethon version: {version.__version__} \n"
@@ -41,6 +45,7 @@ async def amireallyalive(on):
                      f"👦🏻User: {DEFAULTUSER} \n"
                      " \n"
                      "🤖`I will never die.`🤖")    
+<<<<<<< HEAD
 =======
                      " Hey `i am 𝐎𝓷 My 𝕄𝕒𝕤𝕥𝕖𝕣`\n"
                      " \n"
@@ -92,3 +97,18 @@ f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&@&&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
 f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 >>>>>>> 98ce2c2033539e26b4549fffeddada386d3507e0
+=======
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+>>>>>>> 427ad55acdfc999f96ca396c67de39b336314eec

@@ -1,4 +1,5 @@
-telethon>=1.11.3
+#telethon>=1.11.3
+telethon
 pip>=19.2.3
 #hastebin.py
 async_generator
@@ -6,7 +7,8 @@ pybase64
 zalgo_text
 pyfiglet
 lxml
-selenium<=75.0.0.1
+#selenium=<3.121.0
+selenium>=4.0.0a5
 aria2p 
 chatterbot
 chatterbot_corpus>=1.2.0
@@ -20,3 +22,5 @@ numpy>=1.11.1
 hiredis>=1.0.0
 # dill>=0.3.1.1
 # wheel>=0.30.0a0
+chromedriver<=80.0.3987.149
+#chromedriver==2.21.1

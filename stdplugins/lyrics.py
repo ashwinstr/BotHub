@@ -30,7 +30,7 @@ import lyricsgenius
 genius = lyricsgenius.Genius(GApi)
 
 
-@borg.on(admin_cmd(pattern='lyrics(?: |$)(.*)'))
+@borg.on(admin_cmd(pattern='lyric(?: |$)(.*)'))
 async def lyrics(lyr):
 	if GApi == 'None':
 		await lyr.edit(

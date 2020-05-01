@@ -193,7 +193,6 @@ async def on_afkb(event):
 
         message_to_reply = f"Ashwin is **afk since** {total_afkb_time}" + \
             f"\n__and he may be back soon__\n**Because he is** {reason}" \
-
             if reason \
             else f"Ashwin is **afk Since** {total_afkb_time} so wait until he is back.\n**CAUSE** {AFKSK}\n**THANKS**.  "
         msg = await event.reply(message_to_reply)

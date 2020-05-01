@@ -39,7 +39,7 @@ async def amireallyalive(on):
                      f"------------------------------------ \n"
                      f"👦🏻User: {DEFAULTUSER} \n"
                      " \n"
-                     "🤖`I will never die.`🤖")    
+                     "🤖`It's BotHub, I will never die.`🤖")    
 
     
 @borg.on(admin_cmd("3"))
